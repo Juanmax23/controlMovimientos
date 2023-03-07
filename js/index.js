@@ -39,7 +39,6 @@ function addEventListener() {
     document.querySelector("#btnMenuAgregarUnGasto").addEventListener("click", cargarSecciones);
     document.querySelector("#btnMenuAgregarIngreso").addEventListener("click", cargarSecciones);
     document.querySelector("#btnVerMovimientos").addEventListener("click", cargarSecciones);
-    document.querySelector("#btnVerMovimientos").addEventListener("click", cargarSecciones);
     document.querySelector("#btnMenuVerCajeros").addEventListener("click", cargarSecciones);
     document.querySelector("#btnMenuVerCotizadorCripto").addEventListener("click", cargarSecciones);
     // LOG OUT
@@ -373,6 +372,7 @@ function logout() {
     localStorage.removeItem("departamentos");
     localStorage.removeItem("ciudades");
     localStorage.removeItem("nombreUsuario");
+    map = null;
     navegar('pantalla-home');
     // nav.popToRoot();
     activarUsuarioLogeado();
@@ -408,7 +408,6 @@ function guardarUsuarioAPI(usuario) {
     fetch(urlApi + "usuarios.php", requestOptions)
         .then((resp) => resp.json())
         .then(response => {
-            console.log(response)
             if (response.codigo == 200) {
                 localStorage.setItem("nombreUsuario", JSON.stringify(usuario.usuario));
                 localStorage.setItem('usuarioAPP', JSON.stringify(response));
@@ -483,7 +482,7 @@ function obtenerDepartamentosAPI() {
     fetch(urlApi + "departamentos.php", requestOptions)
         .then(response => response.json())
         .then(result => {
-            if(result.codigo == 200) {
+            if (result.codigo == 200) {
                 localStorage.setItem("departamentos", JSON.stringify(result.departamentos));
                 mostrarDepartamentosEnSelect();
             } else {
@@ -534,7 +533,7 @@ function obtenerCiudadesAPI() {
     fetch(urlApi + "ciudades.php", requestOptions)
         .then(response => response.json())
         .then(result => {
-            if(result.codigo == 200) {               
+            if (result.codigo == 200) {
                 localStorage.setItem('ciudades', JSON.stringify(result.ciudades))
                 mostrarCiudadesEnSelect();
             } else {
@@ -581,7 +580,7 @@ function obtenerRubrosAPI() {
     fetch(urlApi + "rubros.php", requestOptions)
         .then(response => response.json())
         .then(result => {
-            if(result.codigo == 200) {
+            if (result.codigo == 200) {
 
                 localStorage.setItem('rubros', JSON.stringify(result.rubros));
                 mostrarRubrosEnSelect();
@@ -774,14 +773,14 @@ function obtenerMovimientos() {
     fetch(urlApi + `movimientos.php?idUsuario=${usu.id}`, requestOptions)
         .then(response => response.json())
         .then(result => {
-            if(result.codigo == 200) {
+            if (result.codigo == 200) {
                 localStorage.setItem('movimientos', JSON.stringify(result.movimientos));
                 mostrarMoviminetos();
                 calcularMontosTotales();
             } else {
                 alert("No se pudieron obtener tus movimientos")
             }
-          
+
         })
         .catch(error => console.log('error', error));
 
@@ -980,6 +979,7 @@ function listarCajeros() {
             obtenerCajerosApi();
         }
 
+
     } catch (error) {
         console.log(error.message);
     }
@@ -1002,7 +1002,7 @@ function obtenerCajerosApi() {
     fetch("https://dwallet.develotion.com/cajeros.php", requestOptions)
         .then(response => response.json())
         .then(result => {
-            if(result.codigo == 200) {
+            if (result.codigo == 200) {
                 localStorage.setItem('cajeros', JSON.stringify(result.cajeros))
                 cargarPosicionUsuario();
             } else {
@@ -1046,7 +1046,6 @@ function inicializarMapa() {
 
     //crear el mapa y lo ubico segun la ubicacion del usuario
     map = L.map('map').setView([posUsu.latitude, posUsu.longitude], 14);
-    console.log(map)
 
     // L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWNhaWFmYSIsImEiOiJjanh4cThybXgwMjl6M2RvemNjNjI1MDJ5In0.BKUxkp2V210uiAM4Pd2YWw', {
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -1122,7 +1121,7 @@ function mostrarDistancia(data) {
 
 function btnBuscarCajerosPorDireccionHandler() {
     let direccion = document.querySelector("#inputBuscadorMapa").value;
-    console.log(direccion)
+
 
     fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${direccion}, Uruguay`)
         .then(response => response.json())
@@ -1134,6 +1133,22 @@ function btnBuscarCajerosPorDireccionHandler() {
                 alert("No se encontraron cajeros con esa direccion");
             }
         });
+}
+
+// COMPARTIR APP
+function compartirAplicacion() {
+
+
+    if (Capacitor.isNativePlatform()) {
+        Capacitor.Plugins.Share.share({
+            title: 'Descarga la aplicacion para controlar todos tus movimientos',
+            text: 'Te recomiendo esta aplicación genial que acabo de descubrira',
+            url: 'https://golden-empanada-be97e6.netlify.app',
+        });
+    } else {
+        alert("No funca para windows")
+    }
+
 }
 
 // Evento de click en html dinamico

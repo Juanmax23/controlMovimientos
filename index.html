@@ -90,13 +90,13 @@
                 </ion-tab-button>
             </ion-item>
             <ion-item href="/verCajeros">
-                <ion-tab-button onclick="listarCajeros()">
+                <ion-tab-button>
                     <ion-icon name="location-outline"></ion-icon>
                     Cajeros
                 </ion-tab-button>
             </ion-item>
             <ion-item href="/verMovimientos">
-                <ion-tab-button onclick="obtenerMovimientos()">
+                <ion-tab-button onclick="listarMovimientos()">
                     <ion-icon name="wallet-outline"></ion-icon>
                     Wallet
                 </ion-tab-button>
@@ -149,6 +149,9 @@
                 </div>
                 <div id="divInicioUsuarioLogeado">
                     <p id="pMensajeLogeado"></p>
+                    <ion-button onclick="compartirAplicacion()">
+                        Compartir aplicación
+                    </ion-button>
                 </div>
             </ion-content>
 
@@ -402,7 +405,8 @@
 
             <ion-content class="ion-padding">
 
-                <ion-input placeholder="Buscar Cajeros, direccion, ciudad..." class="custom" id="inputBuscadorMapa"></ion-input>
+                <ion-input placeholder="Buscar Cajeros, direccion, ciudad..." class="custom"
+                    id="inputBuscadorMapa"></ion-input>
                 <ion-button id="searchCajeroHandler"> buscar </ion-button>
                 <p id="mensajeEnBusquedaDelMapa"></p>
 
@@ -447,7 +451,8 @@
 
                     <br><br>
 
-                    <ion-button id="btnCotizarCriptomoneda"  size="large" slot="start" class="ion-padding-start">Cotizar</ion-button>
+                    <ion-button id="btnCotizarCriptomoneda" size="large" slot="start"
+                        class="ion-padding-start">Cotizar</ion-button>
 
                     <p id="pMensajeCotizadorCripto" class="ion-padding-start"></p>
 
